@@ -25,8 +25,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mainView.collectionView.delegate = self
-        mainView.collectionView.dataSource = self
+        mainView.cardsCollection.delegate = self
+        mainView.cardsCollection.dataSource = self
     }
     
     private func playSound(from url: URL?, atTime: TimeInterval) {
@@ -43,7 +43,7 @@ class MainViewController: UIViewController {
             print(error)
         }
     }
-
+    
 }
 
 // MARK: - UICollectionViewDelegate
@@ -62,7 +62,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        cards.count
+        return cards.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

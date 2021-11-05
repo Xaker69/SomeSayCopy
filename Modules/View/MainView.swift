@@ -12,7 +12,7 @@ class MainView: UIView {
         return label
     }()
     
-    var collectionView: UICollectionView = {
+    var cardsCollection: UICollectionView = {
         let layout = PagingFlowLayout()
         layout.scrollDirection = .horizontal
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -22,8 +22,8 @@ class MainView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.register(VoiceCardCell.self, forCellWithReuseIdentifier: VoiceCardCell.description())
         view.backgroundColor = .clear
-        view.showsHorizontalScrollIndicator = false
         view.decelerationRate = .fast
+        view.showsHorizontalScrollIndicator = false
 
         return view
     }()
@@ -33,8 +33,7 @@ class MainView: UIView {
         backgroundColor = .fromHex(hex: 0x111112)
         
         addSubview(titleLabel)
-        addSubview(collectionView)
-//        addSubview(testView)
+        addSubview(cardsCollection)
     }
     
     required init?(coder: NSCoder) {
@@ -50,7 +49,7 @@ class MainView: UIView {
     
     private func layout() {
         titleLabel.frame = CGRect(x: 0, y: safeAreaInsets.top + 12, width: bounds.width, height: 40)
-        collectionView.frame = CGRect(x: 0, y: bounds.height/2 - (bounds.height/1.7)/2, width: bounds.width, height: bounds.height/1.7)
+        cardsCollection.frame = CGRect(x: 0, y: bounds.height/2 - (bounds.height/1.7)/2, width: bounds.width, height: bounds.height/1.7)
     }
     
 }
