@@ -14,11 +14,6 @@ class MainView: UIView {
     
     var cardsCollection: UICollectionView = {
         let layout = PagingFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 36, bottom: 0, right: 36*3)
-        layout.minimumLineSpacing = 24
-        
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.register(VoiceCardCell.self, forCellWithReuseIdentifier: VoiceCardCell.description())
         view.backgroundColor = .clear
