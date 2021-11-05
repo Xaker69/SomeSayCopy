@@ -78,8 +78,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if let player = player {
-            let cellWidth = UIScreen.main.bounds.width - 36 - 36
-            let spacing = 24.0
+            let cellWidth = (UIScreen.main.bounds.width - 36 - 36) * 0.7
+            let spacing = 50.0
             let index = Int(scrollView.contentOffset.x) / Int(cellWidth + spacing)
             cards[index].timeInterval = player.currentTime
         }
@@ -87,8 +87,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let cellWidth = UIScreen.main.bounds.width - 36 - 36
-        let spacing = 24.0
+        let cellWidth = (UIScreen.main.bounds.width - 36 - 36) * 0.7
+        let spacing = 50.0
         let index = Int(scrollView.contentOffset.x) / Int(cellWidth + spacing)
         
         playSound(from: cards[index].soundUrl, atTime: cards[index].timeInterval)

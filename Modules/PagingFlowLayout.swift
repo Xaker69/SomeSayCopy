@@ -2,12 +2,15 @@ import UIKit
 
 class PagingFlowLayout: UICollectionViewFlowLayout {
 
+    var activeDistance: CGFloat = 300
+    var zoomFactor: CGFloat = 0.3
+    
     override init() {
         super.init()
  
         scrollDirection = .horizontal
         minimumLineSpacing = 50
-        itemSize = CGSize(width: UIScreen.main.bounds.width - 36 - 36, height: UIScreen.main.bounds.height/1.7)
+        itemSize = CGSize(width: (UIScreen.main.bounds.width - 36 - 36) * 0.7, height: (UIScreen.main.bounds.height/1.7) * 0.7)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -15,7 +18,7 @@ class PagingFlowLayout: UICollectionViewFlowLayout {
         
         scrollDirection = .horizontal
         minimumLineSpacing = 50
-        itemSize = CGSize(width: UIScreen.main.bounds.width - 36 - 36, height: UIScreen.main.bounds.height/1.7)
+        itemSize = CGSize(width: (UIScreen.main.bounds.width - 36 - 36) * 0.7, height: (UIScreen.main.bounds.height/1.7) * 0.7)
     }
 
     override func prepare() {
@@ -23,10 +26,30 @@ class PagingFlowLayout: UICollectionViewFlowLayout {
 
         let verticalInsets = (collectionView.frame.height - collectionView.adjustedContentInset.top - collectionView.adjustedContentInset.bottom - itemSize.height) / 2
         let horizontalInsets = (collectionView.frame.width - collectionView.adjustedContentInset.right - collectionView.adjustedContentInset.left - itemSize.width) / 2
-
+        
         sectionInset = UIEdgeInsets(top: verticalInsets, left: horizontalInsets, bottom: verticalInsets, right: horizontalInsets)
-
+            
         super.prepare()
+    }
+
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        guard let collectionView = collectionView else { return nil }
+        
+        let rectAttributes = super.layoutAttributesForElements(in: rect)!.map { $0.copy() as! UICollectionViewLayoutAttributes }
+        let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.frame.size)
+        
+        for attributes in rectAttributes where attributes.frame.intersects(visibleRect) {
+            let distance = visibleRect.midX - attributes.center.x
+            let normalizedDistance = distance / activeDistance
+            
+            if distance.magnitude < activeDistance {
+                let zoom = 1 + zoomFactor * (1 - normalizedDistance.magnitude)
+                
+                attributes.transform3D = CATransform3DMakeScale(zoom, zoom, zoom)
+            }
+        }
+        
+        return rectAttributes
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
@@ -47,5 +70,9 @@ class PagingFlowLayout: UICollectionViewFlowLayout {
 
         return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
     }
-    
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
+
 }
