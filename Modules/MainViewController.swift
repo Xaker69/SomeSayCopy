@@ -4,6 +4,7 @@ import AVFoundation
 class MainViewController: UIViewController {
 
     var player: AVAudioPlayer?
+    
     var cards = [
         VoiceCardModel(backgroundColor: .fromHex(hex: 0xdc6150), soundUrl: Bundle.main.url(forResource: "Bad", withExtension: ".mp3"), timeInterval: .zero),
         VoiceCardModel(backgroundColor: .fromHex(hex: 0x8034c2), soundUrl: Bundle.main.url(forResource: "summer", withExtension: ".mp3"), timeInterval: .zero),
@@ -44,6 +45,23 @@ class MainViewController: UIViewController {
         }
     }
     
+    private func getDurationString(for url: URL?) -> String {
+        guard let url = url else { return "00:00"}
+        
+        do {
+            let player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+            let time = player.duration.magnitude
+            
+            let seconds = Int(time) % 60
+            let minutes = Int(time / 60)
+            
+            return String(format: "%0.2d:%0.2d", minutes, seconds)
+        } catch {
+            print(error)
+            return "00:00"
+        }
+    }
+    
 }
 
 // MARK: - UICollectionViewDelegate
@@ -67,11 +85,11 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VoiceCardCell.description(), for: indexPath) as! VoiceCardCell
-        let color = cards[indexPath.row].backgroundColor
-        let title = cards[indexPath.row].soundUrl?.deletingPathExtension().lastPathComponent
+        let card = cards[indexPath.row]
         
-        cell.titleLabel.text = title
-        cell.gradientLayer.colors = [color.cgColor, color.withAlphaComponent(0.7).cgColor]
+        cell.titleLabel.text = card.soundUrl?.deletingPathExtension().lastPathComponent
+        cell.gradientLayer.colors = [card.backgroundColor.cgColor, card.backgroundColor.withAlphaComponent(0.7).cgColor]
+        cell.durationLabel.text = getDurationString(for: card.soundUrl)
         
         return cell
     }

@@ -4,11 +4,19 @@ class VoiceCardCell: UICollectionViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Тестовая\nЗапись 1"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 28, weight: .semibold)
         label.textColor = .white
         label.numberOfLines = 0
+        
+        return label
+    }()
+    
+    let durationLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.white.withAlphaComponent(0.5)
+        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.textAlignment = .center
         
         return label
     }()
@@ -55,12 +63,16 @@ class VoiceCardCell: UICollectionViewCell {
         layer.cornerCurve = .continuous
         
         contentView.addSubview(titleLabel)
+        contentView.addSubview(durationLabel)
     }
     
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        durationLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        let containerConstraints = [
+        var constraints = [NSLayoutConstraint]()
+        
+        let titleConstraints = [
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),
@@ -68,9 +80,16 @@ class VoiceCardCell: UICollectionViewCell {
             titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 36 - 36),
             titleLabel.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/1.7)
         ]
+
+        let durationConstraints = [
+            durationLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            durationLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            durationLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
+        ]
         
+        constraints.append(contentsOf: titleConstraints)
+        constraints.append(contentsOf: durationConstraints)
         
-        
-        NSLayoutConstraint.activate(containerConstraints)
+        NSLayoutConstraint.activate(constraints)
     }
 }
