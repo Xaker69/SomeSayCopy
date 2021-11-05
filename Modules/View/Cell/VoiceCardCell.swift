@@ -21,6 +21,22 @@ class VoiceCardCell: UICollectionViewCell {
         return label
     }()
     
+    let soundLineBackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        view.layer.cornerRadius = 12
+        view.clipsToBounds = true
+        
+        return view
+    }()
+    
+    let soundLineView: UIView = {
+        let view = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 0, height: 30)))
+        view.backgroundColor = .white
+
+        return view
+    }()
+    
     let gradientLayer = CAGradientLayer()
     var shouldAddGradient = true
     
@@ -64,11 +80,15 @@ class VoiceCardCell: UICollectionViewCell {
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(durationLabel)
+        contentView.addSubview(soundLineBackView)
+        
+        soundLineBackView.addSubview(soundLineView)
     }
     
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         durationLabel.translatesAutoresizingMaskIntoConstraints = false
+        soundLineBackView.translatesAutoresizingMaskIntoConstraints = false
         
         var constraints = [NSLayoutConstraint]()
         
@@ -87,8 +107,16 @@ class VoiceCardCell: UICollectionViewCell {
             durationLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ]
         
+        let soundLineBackConstraint = [
+            soundLineBackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 24),
+            soundLineBackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -24),
+            soundLineBackView.bottomAnchor.constraint(equalTo: durationLabel.topAnchor, constant: -24),
+            soundLineBackView.heightAnchor.constraint(equalToConstant: 30)
+        ]
+        
         constraints.append(contentsOf: titleConstraints)
         constraints.append(contentsOf: durationConstraints)
+        constraints.append(contentsOf: soundLineBackConstraint)
         
         NSLayoutConstraint.activate(constraints)
     }
