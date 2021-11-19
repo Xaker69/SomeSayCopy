@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  SomeSayCopy
-//
-//  Created by Maxim Khrabryi on 03.11.2021.
-//
-
 import UIKit
 
 @main
